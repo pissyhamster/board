@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My GitHub Embed</title>
+  <style>
+/* style.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+  color: #333;
+  text-align: center;
+}
+
+header {
+  background-color: #0073e6;
+  color: white;
+  padding: 20px 0;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+}
+
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #0073e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #005bb5;
+}
+
+img {
+  margin-top: 20px;
+  width: 200px;
+  height: auto;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: #555;
+}
+
+</style>
+</head>
+<body>
+  <header>
+    <h1>Welcome to My Embedded Page</h1>
+  </header>
+  <p>This is a simple embedded site built using GitHub raw files.</p>
+  <button>Click Me!</button>
+  <footer>&copy; 2024 by Your Name</footer>
+
+  <script>
+// main.js
+
+// Function to display a greeting message
+function sayHello() {
+  alert("Hello from your GitHub website!");
+}
+
+// Add an event listener to buttons (if needed)
+document.addEventListener("DOMContentLoaded", () => {
+  const button = document.querySelector("button");
+  if (button) {
+    button.addEventListener("click", sayHello);
+  }
+});
+
+</script>
+</body>
+</html>
+
