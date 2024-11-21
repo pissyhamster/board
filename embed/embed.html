@@ -3,82 +3,128 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My GitHub Embed</title>
+  <title>THE BOARD</title>
   <style>
-/* style.css */
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+/* Base styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
+  background-color: white; /* Set background to white */
+  color: black; /* Set text color to black */
   text-align: center;
 }
 
 header {
-  background-color: #0073e6;
-  color: white;
+  background-color: black; /* Set header background to black */
+  color: white; /* Set header text to white */
   padding: 20px 0;
 }
 
 header h1 {
   margin: 0;
   font-size: 2.5rem;
+  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
 }
 
-button {
+nav {
+  margin-top: 10px;
+}
+
+nav button {
+  margin: 0 5px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #0073e6;
-  color: white;
-  border: none;
+  background-color: black; /* Button background black */
+  color: white; /* Button text white */
+  border: 2px solid white; /* Add white outline */
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
-button:hover {
-  background-color: #005bb5;
+nav button:hover {
+  background-color: white; /* On hover, button background changes to white */
+  color: black; /* On hover, button text changes to black */
+  border-color: black; /* Outline changes to black on hover */
 }
 
-img {
-  margin-top: 20px;
-  width: 200px;
-  height: auto;
+main h2 {
+  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-family: Calibri, sans-serif; /* Set normal text to Calibri */
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
 footer {
   margin-top: 40px;
   font-size: 0.9rem;
-  color: #555;
+  color: black; /* Footer text black */
+}
+
+.scene {
+  display: none; /* Hide all scenes by default */
+  margin: 20px;
+}
+
+.scene.active {
+  display: block; /* Show only the active scene */
 }
 
 </style>
 </head>
 <body>
   <header>
-    <h1>Welcome to My Embedded Page</h1>
+    <h1>THE BOARD</h1>
+    <nav>
+      <button onclick="showScene('seasons')">Seasons</button>
+      <button onclick="showScene('contenders')">Contenders</button>
+    </nav>
   </header>
-  <p>This is a simple embedded site built using GitHub raw files.</p>
-  <button>Click Me!</button>
-  <footer>&copy; 2024 by Your Name</footer>
+
+  <main>
+    <section id="seasons" class="scene active">
+      <h2>Seasons</h2>
+      <p>Here you can view all the seasons and their epic battles.</p>
+    </section>
+
+    <section id="contenders" class="scene">
+      <h2>Contenders</h2>
+      <p>Meet the champions and challengers of THE BOARD.</p>
+    </section>
+  </main>
+
+  <footer>&copy; 2024 by Sensei Matthew</footer>
 
   <script>
-// main.js
+// Updated main.js
 
-// Function to display a greeting message
-function sayHello() {
-  alert("Hello from your GitHub website!");
-}
-
-// Add an event listener to buttons (if needed)
-document.addEventListener("DOMContentLoaded", () => {
-  const button = document.querySelector("button");
-  if (button) {
-    button.addEventListener("click", sayHello);
+function showScene(sceneId) {
+    // Hide all scenes
+    const scenes = document.querySelectorAll('.scene');
+    scenes.forEach(scene => scene.classList.remove('active'));
+  
+    // Show the selected scene
+    const activeScene = document.getElementById(sceneId);
+    if (activeScene) {
+      activeScene.classList.add('active');
+    }
   }
-});
-
+  
+  // Default scene is now "seasons"
+  document.addEventListener('DOMContentLoaded', () => {
+    showScene('seasons');
+  });
+  
 </script>
 </body>
 </html>
-

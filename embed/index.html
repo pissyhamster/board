@@ -3,18 +3,32 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My GitHub Embed</title>
+  <title>THE BOARD</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Welcome to My Embedded Page</h1>
+    <h1>THE BOARD</h1>
+    <nav>
+      <button onclick="showScene('seasons')">Seasons</button>
+      <button onclick="showScene('contenders')">Contenders</button>
+    </nav>
   </header>
-  <p>This is a simple embedded site built using GitHub raw files.</p>
-  <button>Click Me!</button>
-  <footer>&copy; 2024 by Your Name</footer>
+
+  <main>
+    <section id="seasons" class="scene active">
+      <h2>Seasons</h2>
+      <p>Here you can view all the seasons and their epic battles.</p>
+    </section>
+
+    <section id="contenders" class="scene">
+      <h2>Contenders</h2>
+      <p>Meet the champions and challengers of THE BOARD.</p>
+    </section>
+  </main>
+
+  <footer>&copy; 2024 by Sensei Matthew</footer>
 
   <script src="main.js"></script>
 </body>
 </html>
-

@@ -1,46 +1,74 @@
-/* style.css */
+/* Import fonts */
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+/* Base styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: Calibri, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: #f4f4f9;
-  color: #333;
+  background-color: white; /* Set background to white */
+  color: black; /* Set text color to black */
   text-align: center;
 }
 
 header {
-  background-color: #0073e6;
-  color: white;
+  background-color: black; /* Set header background to black */
+  color: white; /* Set header text to white */
   padding: 20px 0;
 }
 
 header h1 {
   margin: 0;
   font-size: 2.5rem;
+  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
 }
 
-button {
+nav {
+  margin-top: 10px;
+}
+
+nav button {
+  margin: 0 5px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: #0073e6;
-  color: white;
-  border: none;
+  background-color: black; /* Button background black */
+  color: white; /* Button text white */
+  border: 2px solid white; /* Add white outline */
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
-button:hover {
-  background-color: #005bb5;
+nav button:hover {
+  background-color: white; /* On hover, button background changes to white */
+  color: black; /* On hover, button text changes to black */
+  border-color: black; /* Outline changes to black on hover */
 }
 
-img {
-  margin-top: 20px;
-  width: 200px;
-  height: auto;
+main h2 {
+  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-family: Calibri, sans-serif; /* Set normal text to Calibri */
+  font-size: 1rem;
+  margin-bottom: 20px;
 }
 
 footer {
   margin-top: 40px;
   font-size: 0.9rem;
-  color: #555;
+  color: black; /* Footer text black */
+}
+
+.scene {
+  display: none; /* Hide all scenes by default */
+  margin: 20px;
+}
+
+.scene.active {
+  display: block; /* Show only the active scene */
 }
