@@ -39,6 +39,29 @@ function getContenderDetails(contenderID) {
 }
 
 
+/**
+ * Replace contender placeholders in a description with their formatted names.
+ * @param {string} description - The description string with placeholders.
+ * @param {Object} contenders - Object with keys for "yin" and "yang", containing their IDs.
+ * @returns {Promise<string>} - A promise resolving to the description with replaced placeholders.
+ */
+async function replaceContenderPlaceholders(description, contenders) {
+  const replacements = {};
+
+  // Prepare replacements for both yin and yang contenders
+  for (const side of Object.keys(contenders)) {
+    for (const id of contenders[side]) {
+      if (!replacements[id]) {
+        replacements[id] = await getContenderDetails(id);
+      }
+    }
+  }
+
+  // Replace placeholders in the description
+  return description.replace(/{(.*?)}/g, (match, id) => replacements[id] || match);
+}
+
+
 
 function showScene(sceneId) {
     // Hide all scenes
@@ -72,19 +95,29 @@ function showScene(sceneId) {
           const yinName = await getContenderDetails(match.Contenders.yin[0]);
           const yangName = await getContenderDetails(match.Contenders.yang[0]);
   
+          // Determine winner if Result is not null
+          let winnerText = "";
+          if (match.Result) {
+            const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
+            const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
+            winnerText = `${winnerNames.join(", ")} WON`;
+          }
+  
+          // Replace placeholders in the description
+          const descriptionText = match.Details.Description
+            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
+            : "&nbsp;";
+  
           const card = document.createElement('div');
-          card.className = 'match-card'; // Updated class name
+          card.className = 'match-card';
           card.innerHTML = `
-            <h3>${match.Format.toUpperCase()} - ${match.Date}</h3>
+            <h3>${match.Details.Style}</h3>
+            <div class="subheading">${match.Date}</div>
+            ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
             <div class="details">
               <div>${yinName}</div>
               <div class="middle">VS</div>
               <div>${yangName}</div>
-            </div>
-            <div class="details">
-              <div>K D S</div>
-              <div></div>
-              <div>K D S</div>
             </div>
           `;
   
@@ -101,6 +134,12 @@ function showScene(sceneId) {
             card.appendChild(roundDetails);
           });
   
+          // Add description as the last element
+          const description = document.createElement('div');
+          description.className = 'description';
+          description.innerHTML = descriptionText;
+          card.appendChild(description);
+  
           container.appendChild(card);
         }
       } else {
@@ -113,7 +152,6 @@ function showScene(sceneId) {
       container.innerHTML = '<p>Error loading matches.</p>';
     }
   }
-  
 
 // Add click event for season buttons
 function loadSeasons() {

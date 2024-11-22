@@ -118,6 +118,98 @@ footer {
   text-transform: none;
 }
 
+#match-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.match-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start; /* Ensure elements stack naturally */
+  align-items: center;
+  background-color: white; /* Default background color: white */
+  color: black; /* Default text color: black */
+  border: 2px solid black; /* Border matches hover color */
+  border-radius: 10px;
+  padding: 15px;
+  width: 90%;
+  max-width: 800px;
+  text-align: center;
+  margin: 20px auto;
+  font-family: 'Bebas Neue', sans-serif;
+  transition: all 0.3s ease; /* Smooth transition for hover */
+  min-height: 300px; /* Ensures consistent height for all cards */
+}
+
+.match-card:hover {
+  background-color: black; /* Change background to black on hover */
+  color: white; /* Change text to white on hover */
+  border-color: white; /* Border matches text color on hover */
+}
+
+.match-card h3 {
+  font-size: 1.5rem;
+  margin: 5px 0;
+}
+
+.match-card .subheading {
+  font-size: 1rem;
+  margin-bottom: 10px;
+  font-family: Calibri, sans-serif;
+}
+
+
+.match-card .winner {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 15px;
+  color: inherit; /* Matches the current text color */
+}
+
+.match-card .description {
+  margin-top: auto; /* Push description to the bottom */
+  font-size: 1rem;
+  font-family: Calibri, sans-serif;
+  text-align: center;
+  min-height: 20px; /* Ensure space even if empty */
+}
+
+.match-card .details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.match-card .details div {
+  flex: 1;
+  text-align: center;
+}
+
+.match-card .details div.middle {
+  font-size: 1.2rem;
+}
+
+.match-card .round-details {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.match-card .round-details div {
+  flex: 1;
+  text-align: center;
+  font-family: Calibri, sans-serif;
+}
+
+
+
+
 </style>
 </head>
 <body>
@@ -142,6 +234,14 @@ footer {
       <p>Meet the champions and challengers of THE BOARD.</p>
     </section>
   </main>
+
+  <section id="matches" class="scene">
+    <h2>Matches</h2>
+    <div id="match-cards-container">
+      <!-- Fighting cards will be dynamically inserted here -->
+    </div>
+  </section>
+  
 
   <footer>&copy; 2024 by Sensei Matthew</footer>
 
@@ -168,6 +268,49 @@ function fetchJSON(relativePath) {
     });
 }
 
+/**
+ * Fetch and format contender data by ID.
+ * @param {string} contenderID - The ID of the contender.
+ * @returns {Promise<string>} - A promise that resolves to the formatted contender string.
+ */
+function getContenderDetails(contenderID) {
+  return fetchJSON(`contenders/${contenderID}.json`)
+    .then(data => {
+      const name = data.Name || "Unknown";
+      const nickname = data.Nickname ? `"${data.Nickname}"` : "";
+      return `${name} ${nickname}`.trim();
+    })
+    .catch(error => {
+      console.error(`Error fetching contender "${contenderID}":`, error);
+      return `{Unknown Contender}`; // Fallback if fetching fails
+    });
+}
+
+
+/**
+ * Replace contender placeholders in a description with their formatted names.
+ * @param {string} description - The description string with placeholders.
+ * @param {Object} contenders - Object with keys for "yin" and "yang", containing their IDs.
+ * @returns {Promise<string>} - A promise resolving to the description with replaced placeholders.
+ */
+async function replaceContenderPlaceholders(description, contenders) {
+  const replacements = {};
+
+  // Prepare replacements for both yin and yang contenders
+  for (const side of Object.keys(contenders)) {
+    for (const id of contenders[side]) {
+      if (!replacements[id]) {
+        replacements[id] = await getContenderDetails(id);
+      }
+    }
+  }
+
+  // Replace placeholders in the description
+  return description.replace(/{(.*?)}/g, (match, id) => replacements[id] || match);
+}
+
+
+
 function showScene(sceneId) {
     // Hide all scenes
     const scenes = document.querySelectorAll('.scene');
@@ -180,28 +323,105 @@ function showScene(sceneId) {
     }
   }
 
+  async function loadMatches(seasonID) {
+    const container = document.getElementById('match-cards-container');
+    container.innerHTML = ''; // Clear previous matches
+  
+    try {
+      const seasons = await fetchJSON("seasons/manifest.json");
+      const season = seasons.find(s => s.ID === seasonID);
+  
+      if (!season) {
+        container.innerHTML = `<p>Season not found.</p>`;
+        console.error(`Season with ID "${seasonID}" not found`);
+        return;
+      }
+  
+      if (season.Matches && season.Matches.length > 0) {
+        for (const matchID of season.Matches) {
+          const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+          const yinName = await getContenderDetails(match.Contenders.yin[0]);
+          const yangName = await getContenderDetails(match.Contenders.yang[0]);
+  
+          // Determine winner if Result is not null
+          let winnerText = "";
+          if (match.Result) {
+            const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
+            const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
+            winnerText = `${winnerNames.join(", ")} WON`;
+          }
+  
+          // Replace placeholders in the description
+          const descriptionText = match.Details.Description
+            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
+            : "&nbsp;";
+  
+          const card = document.createElement('div');
+          card.className = 'match-card';
+          card.innerHTML = `
+            <h3>${match.Details.Style}</h3>
+            <div class="subheading">${match.Date}</div>
+            ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
+            <div class="details">
+              <div>${yinName}</div>
+              <div class="middle">VS</div>
+              <div>${yangName}</div>
+            </div>
+          `;
+  
+          match.Rounds.forEach(round => {
+            const yinStats = round.Scores[match.Contenders.yin[0]];
+            const yangStats = round.Scores[match.Contenders.yang[0]];
+            const roundDetails = document.createElement('div');
+            roundDetails.className = 'round-details';
+            roundDetails.innerHTML = `
+              <div>${yinStats.kills || '-'} ${yinStats.deaths || '-'} ${yinStats.score || '-'}</div>
+              <div class="middle">${round.Map}</div>
+              <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
+            `;
+            card.appendChild(roundDetails);
+          });
+  
+          // Add description as the last element
+          const description = document.createElement('div');
+          description.className = 'description';
+          description.innerHTML = descriptionText;
+          card.appendChild(description);
+  
+          container.appendChild(card);
+        }
+      } else {
+        container.innerHTML = '<p>No matches found for this season.</p>';
+      }
+  
+      showScene('matches');
+    } catch (error) {
+      console.error('Error loading matches:', error);
+      container.innerHTML = '<p>Error loading matches.</p>';
+    }
+  }
 
-// Fetch and populate seasons from the manifest
+// Add click event for season buttons
 function loadSeasons() {
   const container = document.getElementById('season-buttons-container');
 
-  fetchJSON("seasons/manifest.json") // Use the reusable function
+  fetchJSON("seasons/manifest.json")
     .then(data => {
-      // Iterate through the manifest and create buttons
+      console.log("Loaded seasons manifest:", data); // Log the manifest for seasons
       data.forEach(season => {
         if (season.Type === "Season") {
           const button = document.createElement("div");
           button.className = "season-button";
           button.innerHTML = `
-            <div>${season.Name}</div> <!-- Use Name instead of ID -->
+            <div>${season.Name}</div>
             <div class="game-name">${season.Game}</div>
           `;
-          // Add the button to the container
+          button.onclick = () => loadMatches(season.ID); // Load matches when clicked
           container.appendChild(button);
         }
       });
     })
-    .catch(error => console.error("Error loading seasons:", error));
+    .catch(error => console.error("Error loading seasons manifest:", error));
 }
 
 // Initialize
@@ -209,6 +429,7 @@ document.addEventListener("DOMContentLoaded", () => {
   showScene("seasons"); // Default to seasons
   loadSeasons(); // Load season buttons
 });
+
 </script>
 </body>
 </html>

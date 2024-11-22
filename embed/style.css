@@ -122,10 +122,11 @@ footer {
 .match-card {
   display: flex;
   flex-direction: column;
+  justify-content: flex-start; /* Ensure elements stack naturally */
   align-items: center;
-  background-color: black;
-  color: white;
-  border: 2px solid white;
+  background-color: white; /* Default background color: white */
+  color: black; /* Default text color: black */
+  border: 2px solid black; /* Border matches hover color */
   border-radius: 10px;
   padding: 15px;
   width: 90%;
@@ -133,12 +134,41 @@ footer {
   text-align: center;
   margin: 20px auto;
   font-family: 'Bebas Neue', sans-serif;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* Smooth transition for hover */
+  min-height: 300px; /* Ensures consistent height for all cards */
+}
+
+.match-card:hover {
+  background-color: black; /* Change background to black on hover */
+  color: white; /* Change text to white on hover */
+  border-color: white; /* Border matches text color on hover */
 }
 
 .match-card h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
+  margin: 5px 0;
+}
+
+.match-card .subheading {
+  font-size: 1rem;
   margin-bottom: 10px;
+  font-family: Calibri, sans-serif;
+}
+
+
+.match-card .winner {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-top: 15px;
+  color: inherit; /* Matches the current text color */
+}
+
+.match-card .description {
+  margin-top: auto; /* Push description to the bottom */
+  font-size: 1rem;
+  font-family: Calibri, sans-serif;
+  text-align: center;
+  min-height: 20px; /* Ensure space even if empty */
 }
 
 .match-card .details {
@@ -170,8 +200,5 @@ footer {
   font-family: Calibri, sans-serif;
 }
 
-.match-card:hover {
-  background-color: white;
-  color: black;
-  border-color: black;
-}
+
+
