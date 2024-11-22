@@ -1,0 +1,27 @@
+{
+    "Format": "bo6",
+    "Date": "11/1/2024",
+    "Contenders": {
+        "yin": ["bazinga"],
+        "yang": ["terrorist"]
+    },
+    "Details": {
+        "Style": "Best of 1",
+        "Description": "Won by {terrorist} in a highly controversial manner, using a lot of explosives and mines. Additionally, both {terrorist} and {bazinga} had to 'edit' their loadouts midway through the match, wasting a lot of time.",
+        "Special Rules": [] 
+    },
+    "Rounds": [
+        {
+            "Type": "1v1 FFA",
+            "Map": "Protocol" ,
+            "Scores": {
+                "bazinga": {"kills": null, "deaths": null, "score": null},
+                "terrorist": {"kills": null, "deaths": null, "score": null}
+            },
+            "Results": {
+                "yin": false, 
+                "yang": true
+            }
+        }
+    ]
+}
