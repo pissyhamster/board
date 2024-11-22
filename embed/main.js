@@ -103,11 +103,6 @@ function showScene(sceneId) {
             winnerText = `${winnerNames.join(", ")} WON`;
           }
   
-          // Replace placeholders in the description
-          const descriptionText = match.Details.Description
-            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
-            : "&nbsp;";
-  
           const card = document.createElement('div');
           card.className = 'match-card';
           card.innerHTML = `
@@ -115,9 +110,17 @@ function showScene(sceneId) {
             <div class="subheading">${match.Date}</div>
             ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
             <div class="details">
-              <div>${yinName}</div>
+              <div class="contender">
+                <div class="name">${yinName}</div>
+                <div class="stats-header">K D S</div>
+                <div class="stats"></div> <!-- Stats are initially empty -->
+              </div>
               <div class="middle">VS</div>
-              <div>${yangName}</div>
+              <div class="contender">
+                <div class="name">${yangName}</div>
+                <div class="stats-header">K D S</div>
+                <div class="stats"></div> <!-- Stats are initially empty -->
+              </div>
             </div>
           `;
   
@@ -137,7 +140,9 @@ function showScene(sceneId) {
           // Add description as the last element
           const description = document.createElement('div');
           description.className = 'description';
-          description.innerHTML = descriptionText;
+          description.innerHTML = match.Details.Description
+            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
+            : "&nbsp;";
           card.appendChild(description);
   
           container.appendChild(card);
@@ -152,6 +157,8 @@ function showScene(sceneId) {
       container.innerHTML = '<p>Error loading matches.</p>';
     }
   }
+  
+  
 
 // Add click event for season buttons
 function loadSeasons() {
