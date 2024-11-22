@@ -1,0 +1,28 @@
+{
+    "Format": "bo6",
+    "Date": "11/19/2024",
+    "Contenders": {
+        "yin": ["terrorist"],
+        "yang": ["legend"]
+    },
+    "Details": {
+        "Style": "Best of 1",
+        "Description": "Won by {terrorist}, extremely close match with nearly a 1:1 KDR on both sides. {legend} was mad at {terrorist} for stalling and camping after {terrorist} got in the lead.",
+        "Special Rules": ["Always UAV"] 
+    },
+    "Rounds": [
+        {
+            "Type": "1v1 FFA",
+            "Map": "Babylon" ,
+            "Scores": {
+                "terrorist": {"kills": 29, "deaths": 28, "score": 29},
+                "legend": {"kills": 28, "deaths": 29, "score": 28}
+            },
+            "Results": {
+                "yin": true, 
+                "yang": false
+            }
+        }
+    ],
+    "Result": "yin"
+}
