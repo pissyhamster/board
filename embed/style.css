@@ -73,6 +73,13 @@ footer {
   display: block; /* Show only the active scene */
 }
 
+.scene h2 {
+  opacity: 0;
+  transform: translateY(-10px);
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and movement */
+}
+
+
 #season-buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -134,8 +141,14 @@ footer {
   text-align: center;
   margin: 20px auto;
   font-family: 'Bebas Neue', sans-serif;
-  transition: all 0.3s ease; /* Smooth transition for hover */
+  transition: all 0.5s ease; /* Smooth transition for hover */
   min-height: 300px; /* Ensures consistent height for all cards */
+  cursor: pointer;
+}
+
+.match-card.expanded {
+  transform: scale(1.2); /* Larger size when expanded */
+  z-index: 10; /* Bring to front */
 }
 
 .match-card:hover {

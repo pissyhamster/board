@@ -62,18 +62,80 @@ async function replaceContenderPlaceholders(description, contenders) {
 }
 
 
+function showScene(sceneID) {
+  const scenes = document.querySelectorAll('.scene');
+  const nav = document.querySelector('header'); // Reference the nav bar
 
-function showScene(sceneId) {
-    // Hide all scenes
-    const scenes = document.querySelectorAll('.scene');
-    scenes.forEach(scene => scene.classList.remove('active'));
-  
-    // Show the selected scene
-    const activeScene = document.getElementById(sceneId);
-    if (activeScene) {
-      activeScene.classList.add('active');
+  scenes.forEach(scene => {
+    const heading = scene.querySelector('h2'); // Get the heading for this scene
+
+    if (scene.id === sceneID) {
+      // Fade in the target scene
+      scene.classList.add('active');
+
+      if (heading) {
+        heading.style.opacity = '0'; // Reset opacity
+        heading.style.transform = 'translateY(-10px)'; // Reset position
+        setTimeout(() => {
+          heading.style.opacity = '1'; // Fade in
+          heading.style.transform = 'translateY(0)'; // Return to original position
+        }, 10); // Small delay to ensure the transition triggers
+      }
+
+      // Show the nav bar only for Analysis
+      if (sceneID === 'analysis') {
+        nav.classList.add('visible');
+        nav.classList.remove('hidden');
+      }
+    } else {
+      // Fade out all other scenes
+      scene.classList.remove('active');
+
+      if (heading) {
+        heading.style.opacity = '0'; // Fade out
+        heading.style.transform = 'translateY(-10px)'; // Slide upward
+      }
+
+      // Hide the nav bar for non-Analysis scenes
+      if (sceneID === 'matches') {
+        nav.classList.add('hidden');
+        nav.classList.remove('visible');
+      }
     }
+  });
+}
+
+
+
+
+  function expandCard(card) {
+    // Add transition effects for expansion
+    const cards = document.querySelectorAll('.match-card');
+    const nav = document.querySelector('header'); // Reference to the nav bar
+    cards.forEach(c => {
+      if (c !== card) {
+        c.style.opacity = '0'; // Fade out other cards
+      }
+    });
+  
+    card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+    card.style.transform = 'scale(1.2)'; // Expand the clicked card
+    card.style.zIndex = '10';
+    card.style.opacity = '0'; // Ensure the clicked card remains visible
+
+      // Fade out the nav bar
+    nav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    nav.style.opacity = '0';
+    nav.style.transform = 'translateY(-20px)'; // Slide up the nav bar
+  
+    // Wait for the transition to finish before switching to the Analysis scene
+    setTimeout(() => {
+      showScene('analysis');
+      card.style.transform = ''; // Reset card styles
+      cards.forEach(c => (c.style.opacity = '')); // Reset opacity of all cards
+    }, 500); // Match the duration of the transition
   }
+  
 
   async function loadMatches(seasonID) {
     const container = document.getElementById('match-cards-container');
@@ -90,7 +152,8 @@ function showScene(sceneId) {
       }
   
       if (season.Matches && season.Matches.length > 0) {
-        for (const matchID of season.Matches) {
+        const matches = [...season.Matches].reverse(); // Reverse the order of matches
+        for (const matchID of matches) {
           const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
           const yinName = await getContenderDetails(match.Contenders.yin[0]);
           const yangName = await getContenderDetails(match.Contenders.yang[0]);
@@ -135,6 +198,7 @@ function showScene(sceneId) {
               <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
             `;
             card.appendChild(roundDetails);
+            card.onclick = () => expandCard(card); // Attach the click event
           });
   
           // Add description as the last element
@@ -182,6 +246,7 @@ function loadSeasons() {
     })
     .catch(error => console.error("Error loading seasons manifest:", error));
 }
+
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
