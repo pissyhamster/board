@@ -241,90 +241,94 @@ async function loadAnalysis(seasonID, matchID) {
     
     
 
-  async function loadMatches(seasonID) {
-    const container = document.getElementById('match-cards-container');
-    container.innerHTML = ''; // Clear previous matches
-  
-    try {
-      const seasons = await fetchJSON("seasons/manifest.json");
-      const season = seasons.find(s => s.ID === seasonID);
-  
-      if (!season) {
-        container.innerHTML = `<p>Season not found.</p>`;
-        console.error(`Season with ID "${seasonID}" not found`);
-        return;
-      }
-  
-      if (season.Matches && season.Matches.length > 0) {
-        const matches = [...season.Matches].reverse(); // Reverse the order of matches
-        for (const matchID of matches) {
-          const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
-          const yinName = await getContenderDetails(match.Contenders.yin[0]);
-          const yangName = await getContenderDetails(match.Contenders.yang[0]);
-      
-          // Fetch stats for each round (if present)
-          const yinStats = formatStats(match.Rounds?.[0]?.Scores?.[match.Contenders.yin[0]] || {});
-          const yangStats = formatStats(match.Rounds?.[0]?.Scores?.[match.Contenders.yang[0]] || {});
+async function loadMatches(seasonID) {
+  const container = document.getElementById('match-cards-container');
+  container.innerHTML = ''; // Clear previous matches
 
-      
-          // Determine winner if Result is not null
-          let winnerText = "";
-          if (match.Result) {
-            const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
-            const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
-            winnerText = `${winnerNames.join(", ")} WON`;
-          }
-      
-          const card = document.createElement('div');
-          card.className = 'match-card';
-      
-          card.innerHTML = `
-            <h3>${match.Details.Style}</h3>
-            <div class="subheading">${match.Date}</div>
-            ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
-            <div class="details">
-              <div class="left">
-                <h4>${yinName}</h4>
-                <p>K D S</p>
-                <p>${yinStats.kills} ${yinStats.deaths} ${yinStats.score}</p>
-              </div>
-              <div class="middle">VS</div>
-              <div class="right">
-                <h4>${yangName}</h4>
-                <p>K D S</p>
-                <p>${yangStats.kills} ${yangStats.deaths} ${yangStats.score}</p>
-              </div>
-            </div>
-          `;
+  try {
+    const seasons = await fetchJSON("seasons/manifest.json");
+    const season = seasons.find(s => s.ID === seasonID);
 
-          // Add description with placeholder replacements
-          if (match.Details.Description) {
-            const description = document.createElement('div');
-            description.className = 'description';
-            description.innerHTML = await replaceContenderPlaceholders(match.Details.Description, match.Contenders);
-            card.appendChild(description);
-          }
-      
-          // Set up click event for analysis
-          card.onclick = () => {
-            expandCard(card);
-            loadAnalysis(seasonID, matchID); // Load detailed analysis
-          };
-      
-          container.appendChild(card);
-        }
-      } else {
-        container.innerHTML = '<p>No matches found for this season.</p>';
-      }
-  
-      showScene('matches');
-    } catch (error) {
-      console.error('Error loading matches:', error);
-      container.innerHTML = '<p>Error loading matches.</p>';
+    if (!season) {
+      container.innerHTML = `<p>Season not found.</p>`;
+      console.error(`Season with ID "${seasonID}" not found`);
+      return;
     }
+
+    if (season.Matches && season.Matches.length > 0) {
+      const matches = [...season.Matches].reverse(); // Reverse the order of matches
+      for (const matchID of matches) {
+        const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+        const yinName = await getContenderDetails(match.Contenders.yin[0]);
+        const yangName = await getContenderDetails(match.Contenders.yang[0]);
+
+        let winnerText = "";
+        if (match.Result) {
+          const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
+          const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
+          winnerText = `${winnerNames.join(", ")} WON`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'match-card';
+
+        // Generate scores for all rounds
+        const yinRoundScores = match.Rounds.map(round => {
+          const stats = formatStats(round.Scores[match.Contenders.yin[0]]);
+          return `${stats.kills} ${stats.deaths} ${stats.score}`;
+        }).join("<br>");
+
+        const yangRoundScores = match.Rounds.map(round => {
+          const stats = formatStats(round.Scores[match.Contenders.yang[0]]);
+          return `${stats.kills} ${stats.deaths} ${stats.score}`;
+        }).join("<br>");
+
+        card.innerHTML = `
+          <h3>${match.Details.Style}</h3>
+          <div class="subheading">${match.Date}</div>
+          ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
+          <div class="details">
+            <div class="left">
+              <h4>${yinName}</h4>
+              <p>K D S</p>
+              <p>${yinRoundScores}</p>
+            </div>
+            <div class="middle">VS</div>
+            <div class="right">
+              <h4>${yangName}</h4>
+              <p>K D S</p>
+              <p>${yangRoundScores}</p>
+            </div>
+          </div>
+        `;
+
+        // Add description with placeholder replacements
+        if (match.Details.Description) {
+          const description = document.createElement('div');
+          description.className = 'description';
+          description.innerHTML = await replaceContenderPlaceholders(match.Details.Description, match.Contenders);
+          card.appendChild(description);
+        }
+
+        // Set up click event for analysis
+        card.onclick = () => {
+          expandCard(card);
+          loadAnalysis(seasonID, matchID); // Load detailed analysis
+        };
+
+        container.appendChild(card);
+      }
+    } else {
+      container.innerHTML = '<p>No matches found for this season.</p>';
+    }
+
+    showScene('matches');
+  } catch (error) {
+    console.error('Error loading matches:', error);
+    container.innerHTML = '<p>Error loading matches.</p>';
   }
-  
-  
+}
+
 
 // Add click event for season buttons
 function loadSeasons() {

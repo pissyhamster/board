@@ -1,0 +1,40 @@
+{
+    "Format": "bo6",
+    "Date": "11/21/2024",
+    "Contenders": {
+        "yin": ["terrorist"],
+        "yang": ["legend"]
+    },
+    "Details": {
+        "Style": "Series of 2",
+        "Description": "Tied, nobody won this series.",
+        "Special Rules": ["Always UAV"] 
+    },
+    "Rounds": [
+        {
+            "Type": "1v1 FFA",
+            "Map": "Hideout" ,
+            "Scores": {
+                "terrorist": {"kills": 19, "deaths": 28, "score": 19},
+                "legend": {"kills": 28, "deaths": 19, "score": 28}
+            },
+            "Results": {
+                "yin": false, 
+                "yang": true
+            }
+        },
+        {
+            "Type": "1v1 FFA",
+            "Map": "Extraction" ,
+            "Scores": {
+                "terrorist": {"kills": 20, "deaths": 19, "score": 20},
+                "obama": {"kills": 19, "deaths": 20, "score": 19}
+            },
+            "Results": {
+                "yin": true, 
+                "yang": false
+            }
+        }
+    ],
+    "Result": null
+}
