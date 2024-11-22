@@ -57,7 +57,7 @@ async function replaceContenderPlaceholders(description, contenders) {
     }
   }
 
-  // Replace placeholders in the description
+  // Replace all placeholders in the description
   return description.replace(/{(.*?)}/g, (match, id) => replacements[id] || match);
 }
 
@@ -261,7 +261,12 @@ async function loadAnalysis(seasonID, matchID) {
           const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
           const yinName = await getContenderDetails(match.Contenders.yin[0]);
           const yangName = await getContenderDetails(match.Contenders.yang[0]);
-  
+      
+          // Fetch stats for each round (if present)
+          const yinStats = formatStats(match.Rounds?.[0]?.Scores?.[match.Contenders.yin[0]] || {});
+          const yangStats = formatStats(match.Rounds?.[0]?.Scores?.[match.Contenders.yang[0]] || {});
+
+      
           // Determine winner if Result is not null
           let winnerText = "";
           if (match.Result) {
@@ -269,53 +274,43 @@ async function loadAnalysis(seasonID, matchID) {
             const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
             winnerText = `${winnerNames.join(", ")} WON`;
           }
-  
+      
           const card = document.createElement('div');
           card.className = 'match-card';
+      
           card.innerHTML = `
             <h3>${match.Details.Style}</h3>
             <div class="subheading">${match.Date}</div>
             ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
             <div class="details">
-              <div class="contender">
-                <div class="name">${yinName}</div>
-                <div class="stats-header">K D S</div>
-                <div class="stats"></div> <!-- Stats are initially empty -->
+              <div class="left">
+                <h4>${yinName}</h4>
+                <p>K D S</p>
+                <p>${yinStats.kills} ${yinStats.deaths} ${yinStats.score}</p>
               </div>
               <div class="middle">VS</div>
-              <div class="contender">
-                <div class="name">${yangName}</div>
-                <div class="stats-header">K D S</div>
-                <div class="stats"></div> <!-- Stats are initially empty -->
+              <div class="right">
+                <h4>${yangName}</h4>
+                <p>K D S</p>
+                <p>${yangStats.kills} ${yangStats.deaths} ${yangStats.score}</p>
               </div>
             </div>
           `;
-  
-          match.Rounds.forEach(round => {
-            const yinStats = round.Scores[match.Contenders.yin[0]];
-            const yangStats = round.Scores[match.Contenders.yang[0]];
-            const roundDetails = document.createElement('div');
-            roundDetails.className = 'round-details';
-            roundDetails.innerHTML = `
-              <div>${yinStats.kills || '-'} ${yinStats.deaths || '-'} ${yinStats.score || '-'}</div>
-              <div class="middle">${round.Map}</div>
-              <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
-            `;
-            card.appendChild(roundDetails);
-            card.onclick = () => {
-              expandCard(card);
-              loadAnalysis(seasonID, matchID); // Load detailed analysis
-            };            
-          });
-  
-          // Add description as the last element
-          const description = document.createElement('div');
-          description.className = 'description';
-          description.innerHTML = match.Details.Description
-            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
-            : "&nbsp;";
-          card.appendChild(description);
-  
+
+          // Add description with placeholder replacements
+          if (match.Details.Description) {
+            const description = document.createElement('div');
+            description.className = 'description';
+            description.innerHTML = await replaceContenderPlaceholders(match.Details.Description, match.Contenders);
+            card.appendChild(description);
+          }
+      
+          // Set up click event for analysis
+          card.onclick = () => {
+            expandCard(card);
+            loadAnalysis(seasonID, matchID); // Load detailed analysis
+          };
+      
           container.appendChild(card);
         }
       } else {

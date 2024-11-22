@@ -1,26 +1,41 @@
-/* Import fonts */
+/* ======================================= */
+/* Fonts and Base Styles                   */
+/* ======================================= */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-/* Base styles */
 body {
   font-family: Calibri, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: white; /* Set background to white */
-  color: black; /* Set text color to black */
+  background-color: white;
+  color: black;
   text-align: center;
 }
 
+p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: black;
+}
+
+/* ======================================= */
+/* Header and Navigation                   */
+/* ======================================= */
 header {
-  background-color: black; /* Set header background to black */
-  color: white; /* Set header text to white */
+  background-color: black;
+  color: white;
   padding: 20px 0;
 }
 
 header h1 {
   margin: 0;
   font-size: 2.5rem;
-  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 nav {
@@ -31,57 +46,44 @@ nav button {
   margin: 0 5px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: black; /* Button background black */
-  color: white; /* Button text white */
-  border: 2px solid white; /* Add white outline */
+  background-color: black;
+  color: white;
+  border: 2px solid white;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
-  transition: opacity 0.7s ease, transform 0.7s ease; /* Smooth fade and slide */
+  font-family: 'Bebas Neue', sans-serif;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 nav button:hover {
-  background-color: white; /* On hover, button background changes to white */
-  color: black; /* On hover, button text changes to black */
-  border-color: black; /* Outline changes to black on hover */
+  background-color: white;
+  color: black;
+  border-color: black;
 }
 
-main h2 {
-  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-p {
-  font-family: Calibri, sans-serif; /* Set normal text to Calibri */
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: black; /* Footer text black */
-}
-
+/* ======================================= */
+/* Scenes and General Layout               */
+/* ======================================= */
 .scene {
-  display: none; /* Hide all scenes by default */
+  display: none;
   margin: 20px;
 }
 
 .scene.active {
-  display: block; /* Show only the active scene */
+  display: block;
 }
 
 .scene h2 {
-  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
+  font-family: 'Bebas Neue', sans-serif;
   font-size: 2rem;
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and movement */
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-
+/* ======================================= */
+/* Season Buttons                          */
+/* ======================================= */
 #season-buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -101,10 +103,10 @@ footer {
   border-radius: 10px;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 18px;
-  cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   width: 150px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
@@ -120,6 +122,9 @@ footer {
   text-transform: none;
 }
 
+/* ======================================= */
+/* Match Cards                             */
+/* ======================================= */
 #match-cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -129,13 +134,11 @@ footer {
 }
 
 .match-card {
-  display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure elements stack naturally */
   align-items: center;
-  background-color: white; /* Default background color: white */
-  color: black; /* Default text color: black */
-  border: 2px solid black; /* Border matches hover color */
+  background-color: white;
+  color: black;
+  border: 2px solid black;
   border-radius: 10px;
   padding: 15px;
   width: 90%;
@@ -143,20 +146,15 @@ footer {
   text-align: center;
   margin: 20px auto;
   font-family: 'Bebas Neue', sans-serif;
-  transition: all 0.5s ease; /* Smooth transition for hover */
-  min-height: 300px; /* Ensures consistent height for all cards */
+  transition: all 0.5s ease;
+  min-height: 300px;
   cursor: pointer;
 }
 
-.match-card.expanded {
-  transform: scale(1.2); /* Larger size when expanded */
-  z-index: 10; /* Bring to front */
-}
-
 .match-card:hover {
-  background-color: black; /* Change background to black on hover */
-  color: white; /* Change text to white on hover */
-  border-color: white; /* Border matches text color on hover */
+  background-color: black;
+  color: white;
+  border-color: white;
 }
 
 .match-card h3 {
@@ -170,73 +168,52 @@ footer {
   font-family: Calibri, sans-serif;
 }
 
-
 .match-card .winner {
   font-size: 2rem;
   font-weight: bold;
   margin-top: 15px;
-  color: inherit; /* Matches the current text color */
+  color: inherit;
 }
 
 .match-card .description {
-  margin-top: auto; /* Push description to the bottom */
+  margin-top: auto;
   font-size: 1rem;
   font-family: Calibri, sans-serif;
   text-align: center;
-  min-height: 20px; /* Ensure space even if empty */
+  min-height: 20px;
 }
 
 .match-card .details {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 10px;
+  text-align: center; /* Center-align everything */
+  margin-top: 20px;
 }
 
-.match-card .details div {
-  flex: 1;
-  text-align: center;
+.match-card .details .left,
+.match-card .details .right {
+  display: inline-block; /* Allow left and right sections to sit inline */
+  vertical-align: top; /* Align elements to the top */
+  width: 40%; /* Allocate space for each side */
+  padding: 0 10px; /* Add spacing inside each side */
+  text-align: center; /* Center-align content within each section */
 }
 
-.match-card .details div.middle {
-  font-size: 1.2rem;
-}
-
-.match-card .round-details {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 15px;
-}
-
-.match-card .round-details div {
-  flex: 1;
-  text-align: center;
-  font-family: Calibri, sans-serif;
-}
-
-.match-card .contender {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.match-card .contender .name {
-  font-size: 1.2rem;
+.match-card .details .middle {
+  display: inline-block; /* Allow the middle section to sit inline */
+  vertical-align: top; /* Align to the top of the left and right sections */
+  width: 10%; /* Keep the middle section compact */
+  text-align: center; /* Center-align VS */
+  font-size: 1.5rem;
   font-weight: bold;
 }
 
-.match-card .contender .stats-header {
-  font-size: 0.9rem;
-  font-family: Calibri, sans-serif;
-  margin: 5px 0;
+.match-card.expanded {
+  transform: scale(1.2);
+  z-index: 10;
 }
 
-.match-card .contender .stats {
-  font-size: 0.9rem;
-  font-family: Calibri, sans-serif;
-  color: inherit; /* Matches the card's text color */
-}
-
+/* ======================================= */
+/* Analysis Card                           */
+/* ======================================= */
 .analysis-card {
   background-color: white;
   color: black;
@@ -247,14 +224,14 @@ footer {
   max-width: 800px;
   font-family: 'Bebas Neue', sans-serif;
   text-align: center;
-  opacity: 1; /* Start hidden */
-  transform: translateY(20px); /* Start slightly below */
-  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and slide */
-}
-
-.analysis-card.hidden {
   opacity: 0;
   transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.analysis-card:not(.hidden) {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .analysis-card h1 {
@@ -285,35 +262,30 @@ footer {
   border-radius: 5px;
 }
 
-.analysis-card .round-details h3 {
-  font-size: 1rem;
-}
-
 .analysis-card .round-details .stats {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
 
-.analysis-card .round-details .stats h4 {
+.analysis-card .description {
+  margin-top: 20px;
   font-size: 1rem;
+  font-family: Calibri, sans-serif;
 }
 
+/* ======================================= */
+/* Stats                                   */
+/* ======================================= */
 .stats {
   display: flex;
   justify-content: space-between;
   margin: 10px 0;
 }
 
-.analysis-card .round-details .stats {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
-}
-
 .stats-left,
 .stats-right {
-  padding: 0 20px; /* Ensure padding for spacers */
+  padding: 0 20px;
   text-align: center;
 }
 
@@ -325,13 +297,3 @@ footer {
 .stats p {
   margin: 0;
 }
-
-.analysis-card .description {
-  margin-top: 20px;
-  font-size: 1rem;
-  font-family: Calibri, sans-serif;
-  text-align: center;
-}
-
-
-
