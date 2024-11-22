@@ -20,6 +20,26 @@ function fetchJSON(relativePath) {
     });
 }
 
+/**
+ * Fetch and format contender data by ID.
+ * @param {string} contenderID - The ID of the contender.
+ * @returns {Promise<string>} - A promise that resolves to the formatted contender string.
+ */
+function getContenderDetails(contenderID) {
+  return fetchJSON(`contenders/${contenderID}.json`)
+    .then(data => {
+      const name = data.Name || "Unknown";
+      const nickname = data.Nickname ? `"${data.Nickname}"` : "";
+      return `${name} ${nickname}`.trim();
+    })
+    .catch(error => {
+      console.error(`Error fetching contender "${contenderID}":`, error);
+      return `{Unknown Contender}`; // Fallback if fetching fails
+    });
+}
+
+
+
 function showScene(sceneId) {
     // Hide all scenes
     const scenes = document.querySelectorAll('.scene');
@@ -32,40 +52,68 @@ function showScene(sceneId) {
     }
   }
 
-// Function to load matches for a selected season
-function loadMatches(seasonID) {
-  const container = document.getElementById('match-cards-container');
-  container.innerHTML = ''; // Clear previous matches
-
-  fetchJSON("seasons/manifest.json")
-    .then(seasons => {
-      // Find the selected season from the manifest
+  async function loadMatches(seasonID) {
+    const container = document.getElementById('match-cards-container');
+    container.innerHTML = ''; // Clear previous matches
+  
+    try {
+      const seasons = await fetchJSON("seasons/manifest.json");
       const season = seasons.find(s => s.ID === seasonID);
-      if (!season) throw new Error(`Season with ID "${seasonID}" not found`);
-
+  
+      if (!season) {
+        container.innerHTML = `<p>Season not found.</p>`;
+        console.error(`Season with ID "${seasonID}" not found`);
+        return;
+      }
+  
       if (season.Matches && season.Matches.length > 0) {
-        // Fetch and display each match
-        season.Matches.forEach(matchID => {
-          fetchJSON(`seasons/${seasonID}/${matchID}.json`).then(match => {
-            const card = document.createElement('div');
-            card.className = 'match-card';
-            card.innerHTML = `
-              <h3>${match.Date} - ${match.Format.toUpperCase()}</h3>
-              <p>${match.Details.Description}</p>
-              <div class="contender">Winner: ${
-                match.Rounds[0].Results.yang ? match.Contenders.yang[0] : match.Contenders.yin[0]
-              }</div>
+        for (const matchID of season.Matches) {
+          const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+          const yinName = await getContenderDetails(match.Contenders.yin[0]);
+          const yangName = await getContenderDetails(match.Contenders.yang[0]);
+  
+          const card = document.createElement('div');
+          card.className = 'match-card'; // Updated class name
+          card.innerHTML = `
+            <h3>${match.Format.toUpperCase()} - ${match.Date}</h3>
+            <div class="details">
+              <div>${yinName}</div>
+              <div class="middle">VS</div>
+              <div>${yangName}</div>
+            </div>
+            <div class="details">
+              <div>K D S</div>
+              <div></div>
+              <div>K D S</div>
+            </div>
+          `;
+  
+          match.Rounds.forEach(round => {
+            const yinStats = round.Scores[match.Contenders.yin[0]];
+            const yangStats = round.Scores[match.Contenders.yang[0]];
+            const roundDetails = document.createElement('div');
+            roundDetails.className = 'round-details';
+            roundDetails.innerHTML = `
+              <div>${yinStats.kills || '-'} ${yinStats.deaths || '-'} ${yinStats.score || '-'}</div>
+              <div class="middle">${round.Map}</div>
+              <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
             `;
-            container.appendChild(card);
+            card.appendChild(roundDetails);
           });
-        });
+  
+          container.appendChild(card);
+        }
       } else {
         container.innerHTML = '<p>No matches found for this season.</p>';
       }
-      showScene('matches'); // Switch to the matches scene
-    })
-    .catch(error => console.error('Error loading matches:', error));
-}
+  
+      showScene('matches');
+    } catch (error) {
+      console.error('Error loading matches:', error);
+      container.innerHTML = '<p>Error loading matches.</p>';
+    }
+  }
+  
 
 // Add click event for season buttons
 function loadSeasons() {
@@ -73,6 +121,7 @@ function loadSeasons() {
 
   fetchJSON("seasons/manifest.json")
     .then(data => {
+      console.log("Loaded seasons manifest:", data); // Log the manifest for seasons
       data.forEach(season => {
         if (season.Type === "Season") {
           const button = document.createElement("div");
@@ -86,7 +135,7 @@ function loadSeasons() {
         }
       });
     })
-    .catch(error => console.error("Error loading seasons:", error));
+    .catch(error => console.error("Error loading seasons manifest:", error));
 }
 
 // Initialize
