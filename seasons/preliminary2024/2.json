@@ -1,0 +1,52 @@
+{
+    "Format": "bo6",
+    "Date": "11/22/2024",
+    "Contenders": {
+        "yin": ["bazinga"],
+        "yang": ["terrorist"]
+    },
+    "Details": {
+        "Style": "Best of 3",
+        "Description": null,
+        "Special Rules": [] 
+    },
+    "Rounds": [
+        {
+            "Type": "1v1 FFA",
+            "Map": "Nuketown" ,
+            "Scores": {
+                "bazinga": {"kills": null, "deaths": null, "score": null},
+                "terrorist": {"kills": null, "deaths": null, "score": null}
+            },
+            "Results": {
+                "yin": null, 
+                "yang": null
+            }
+        },
+        {
+            "Type": "1v1 FFA",
+            "Map": "TBD" ,
+            "Scores": {
+                "bazinga": {"kills": null, "deaths": null, "score": null},
+                "terrorist": {"kills": null, "deaths": null, "score": null}
+            },
+            "Results": {
+                "yin": null, 
+                "yang": null
+            }
+        },
+        {
+            "Type": "1v1 FFA",
+            "Map": "TBD" ,
+            "Scores": {
+                "bazinga": {"kills": null, "deaths": null, "score": null},
+                "terrorist": {"kills": null, "deaths": null, "score": null}
+            },
+            "Results": {
+                "yin": null, 
+                "yang": null
+            }
+        }
+    ],
+    "Result": null
+}
