@@ -1,0 +1,28 @@
+{
+    "Format": "bo6",
+    "Date": "11/1/2024",
+    "Contenders": {
+        "yin": ["bazinga"],
+        "yang": ["obama"]
+    },
+    "Details": {
+        "Style": "Best of 1",
+        "Description": "Won by {obama}, not many explosives were used this match.",
+        "Special Rules": [] 
+    },
+    "Rounds": [
+        {
+            "Type": "1v1 FFA",
+            "Map": "Nuketown" ,
+            "Scores": {
+                "bazinga": {"kills": 7, "deaths": 23, "score": 7},
+                "terrorist": {"kills": 23, "deaths": 7, "score": 23}
+            },
+            "Results": {
+                "yin": false, 
+                "yang": true
+            }
+        }
+    ],
+    "Result": "yang"
+}
