@@ -108,34 +108,138 @@ function showScene(sceneID) {
 
 
 
-  function expandCard(card) {
-    // Add transition effects for expansion
-    const cards = document.querySelectorAll('.match-card');
-    const nav = document.querySelector('header'); // Reference to the nav bar
-    cards.forEach(c => {
-      if (c !== card) {
-        c.style.opacity = '0'; // Fade out other cards
-      }
-    });
-  
-    card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-    card.style.transform = 'scale(1.2)'; // Expand the clicked card
-    card.style.zIndex = '10';
-    card.style.opacity = '0'; // Ensure the clicked card remains visible
+function expandCard(card) {
+  const cards = document.querySelectorAll('.match-card');
+  const nav = document.querySelector('header'); // Reference to the nav bar
 
-      // Fade out the nav bar
-    nav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    nav.style.opacity = '0';
-    nav.style.transform = 'translateY(-20px)'; // Slide up the nav bar
+  // Fade out all cards except the selected one
+  cards.forEach(c => {
+    if (c !== card) {
+      c.style.transition = 'opacity 0.5s ease';
+      c.style.opacity = '0'; // Fade out other cards
+    }
+  });
+
+  // Expand the selected card
+  card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+  card.style.transform = 'scale(1.2)'; // Expand the clicked card
+  card.style.zIndex = '10';
+  card.style.opacity = '0'; // Fade out the clicked card
+
+  // Fade out the nav bar
+  nav.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  nav.style.opacity = '0';
+  nav.style.transform = 'translateY(-100%)'; // Slide up
+
+  // Delay to show the analysis mode
+  setTimeout(() => {
+    showScene('analysis');
+
+    // Slide the nav bar back down and fade it in
+    nav.style.opacity = '1';
+    nav.style.transform = 'translateY(0)'; // Reset position
+  }, 500);
+}
+
+function formatStats(stats) {
+  return {
+    kills: stats?.kills ?? '-',
+    deaths: stats?.deaths ?? '-',
+    score: stats?.score ?? '-',
+  };
+}
+
   
-    // Wait for the transition to finish before switching to the Analysis scene
+async function loadAnalysis(seasonID, matchID) {
+  const container = document.getElementById('analysis-container');
+  container.innerHTML = ''; // Clear previous content
+
+  try {
+    const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+    const yinName = await getContenderDetails(match.Contenders.yin[0]);
+    const yangName = await getContenderDetails(match.Contenders.yang[0]);
+
+    // Determine the final result
+    let finalResultText;
+    if (!match.Result) {
+      finalResultText = "Game not yet played";
+    } else {
+      const finalResult = match.Result === "yin" ? yinName : yangName;
+      finalResultText = `${finalResult} WON`;
+    }
+
+    // Create the analysis card
+    const analysisCard = document.createElement('div');
+    analysisCard.className = 'analysis-card hidden'; // Start hidden for fade-in
+    analysisCard.innerHTML = `
+      <h1>${yinName} VS ${yangName}</h1>
+      <h2>${match.Details.Style}</h2>
+      <h3>${match.Date}</h3>
+      <div class="final-result">
+        <strong>Series Result:</strong> ${finalResultText}
+      </div>
+      <h2>ROUNDS</h2>
+    `;
+
+    // Add round details
+    match.Rounds.forEach((round, index) => {
+      const yinStats = formatStats(round.Scores[match.Contenders.yin[0]]);
+      const yangStats = formatStats(round.Scores[match.Contenders.yang[0]]);
+    
+      const roundResult = round.Results.yin === null && round.Results.yang === null
+        ? "No result yet"
+        : round.Results.yin
+        ? yinName
+        : yangName;
+    
+      const roundDetails = document.createElement('div');
+      roundDetails.className = 'round-details';
+      roundDetails.innerHTML = `
+        <h3>Round ${index + 1}: ${round.Type} on ${round.Map}</h3>
+        <div class="stats">
+          <div class="stats-left">
+            <h4>${yinName}</h4>
+            <p>K D S</p>
+            <p>${yinStats.kills} ${yinStats.deaths} ${yinStats.score}</p>
+          </div>
+          <div class="stats-right">
+            <h4>${yangName}</h4>
+            <p>K D S</p>
+            <p>${yangStats.kills} ${yangStats.deaths} ${yangStats.score}</p>
+          </div>
+        </div>
+        <div class="round-result">
+          <strong>Round Winner:</strong> ${roundResult}
+        </div>
+      `;
+      analysisCard.appendChild(roundDetails);
+    });
+
+    // Add description
+    const descriptionText = match.Details.Description
+      ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
+      : "No description provided.";
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.className = 'description';
+    descriptionDiv.innerHTML = `<p>${descriptionText}</p>`;
+    analysisCard.appendChild(descriptionDiv);
+
+    // Append the card to the container in a hidden state
+    container.appendChild(analysisCard);
+
+    // Force reflow and trigger fade-in
     setTimeout(() => {
-      showScene('analysis');
-      card.style.transform = ''; // Reset card styles
-      cards.forEach(c => (c.style.opacity = '')); // Reset opacity of all cards
-    }, 500); // Match the duration of the transition
+      analysisCard.offsetHeight; // Trigger reflow
+      analysisCard.classList.remove('hidden'); // Apply the visible styles
+    }, 500); // Delay matches the fade-out of other cards
+  } catch (error) {
+    console.error(`Error loading match analysis:`, error);
+    container.innerHTML = '<p>Error loading analysis data.</p>';
   }
-  
+}
+
+    
+    
 
   async function loadMatches(seasonID) {
     const container = document.getElementById('match-cards-container');
@@ -198,7 +302,10 @@ function showScene(sceneID) {
               <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
             `;
             card.appendChild(roundDetails);
-            card.onclick = () => expandCard(card); // Attach the click event
+            card.onclick = () => {
+              expandCard(card);
+              loadAnalysis(seasonID, matchID); // Load detailed analysis
+            };            
           });
   
           // Add description as the last element

@@ -37,7 +37,7 @@ nav button {
   border-radius: 5px;
   cursor: pointer;
   font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  transition: opacity 0.7s ease, transform 0.7s ease; /* Smooth fade and slide */
 }
 
 nav button:hover {
@@ -74,6 +74,8 @@ footer {
 }
 
 .scene h2 {
+  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
+  font-size: 2rem;
   opacity: 0;
   transform: translateY(-10px);
   transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and movement */
@@ -233,6 +235,102 @@ footer {
   font-size: 0.9rem;
   font-family: Calibri, sans-serif;
   color: inherit; /* Matches the card's text color */
+}
+
+.analysis-card {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  font-family: 'Bebas Neue', sans-serif;
+  text-align: center;
+  opacity: 1; /* Start hidden */
+  transform: translateY(20px); /* Start slightly below */
+  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and slide */
+}
+
+.analysis-card.hidden {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.analysis-card h1 {
+  font-size: 2rem;
+  margin-bottom: 10px;
+}
+
+.analysis-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.analysis-card h3 {
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.analysis-card .final-result {
+  font-size: 1.2rem;
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.analysis-card .round-details {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.analysis-card .round-details h3 {
+  font-size: 1rem;
+}
+
+.analysis-card .round-details .stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.analysis-card .round-details .stats h4 {
+  font-size: 1rem;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.analysis-card .round-details .stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.stats-left,
+.stats-right {
+  padding: 0 20px; /* Ensure padding for spacers */
+  text-align: center;
+}
+
+.stats h4 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.stats p {
+  margin: 0;
+}
+
+.analysis-card .description {
+  margin-top: 20px;
+  font-size: 1rem;
+  font-family: Calibri, sans-serif;
+  text-align: center;
 }
 
 
