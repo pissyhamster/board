@@ -72,3 +72,41 @@ footer {
 .scene.active {
   display: block; /* Show only the active scene */
 }
+
+#season-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.season-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  width: 150px;
+  transition: all 0.3s ease;
+}
+
+.season-button:hover {
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+
+.season-button .game-name {
+  font-size: 12px;
+  margin-top: 5px;
+  text-transform: none;
+}

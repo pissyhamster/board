@@ -80,6 +80,44 @@ footer {
   display: block; /* Show only the active scene */
 }
 
+#season-buttons-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.season-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 18px;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-align: center;
+  width: 150px;
+  transition: all 0.3s ease;
+}
+
+.season-button:hover {
+  background-color: white;
+  color: black;
+  border-color: black;
+}
+
+.season-button .game-name {
+  font-size: 12px;
+  margin-top: 5px;
+  text-transform: none;
+}
+
 </style>
 </head>
 <body>
@@ -94,8 +132,10 @@ footer {
   <main>
     <section id="seasons" class="scene active">
       <h2>Seasons</h2>
-      <p>Here you can view all the seasons and their epic battles.</p>
-    </section>
+      <div id="season-buttons-container">
+        <!-- Buttons will be dynamically inserted here -->
+      </div>
+    </section>    
 
     <section id="contenders" class="scene">
       <h2>Contenders</h2>
@@ -119,12 +159,41 @@ function showScene(sceneId) {
       activeScene.classList.add('active');
     }
   }
-  
-  // Default scene is now "seasons"
-  document.addEventListener('DOMContentLoaded', () => {
-    showScene('seasons');
-  });
-  
+
+// Fetch and populate seasons from the manifest
+function loadSeasons() {
+  const container = document.getElementById('season-buttons-container');
+  const manifestPath = 'https://raw.githubusercontent.com/pissyhamster/board/main/seasons/manifest.json'; // Correct GitHub raw path
+
+  fetch(manifestPath)
+    .then(response => {
+      if (!response.ok) throw new Error(`Failed to load manifest: ${response.statusText}`);
+      return response.json();
+    })
+    .then(data => {
+      // Iterate through the manifest and create buttons
+      data.forEach(season => {
+        if (season.Type === 'Season') {
+          const button = document.createElement('div');
+          button.className = 'season-button';
+          button.innerHTML = `
+            <div>${season.Name}</div> <!-- Use Name instead of ID -->
+            <div class="game-name">${season.Game}</div>
+          `;
+          // Add the button to the container
+          container.appendChild(button);
+        }
+      });
+    })
+    .catch(error => console.error('Error loading seasons:', error));
+}
+
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  showScene('seasons'); // Default to seasons
+  loadSeasons(); // Load season buttons
+});
+
 </script>
 </body>
 </html>
