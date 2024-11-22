@@ -5,29 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>THE BOARD</title>
   <style>
-/* Import fonts */
+/* ======================================= */
+/* Fonts and Base Styles                   */
+/* ======================================= */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
-/* Base styles */
 body {
   font-family: Calibri, sans-serif;
   margin: 0;
   padding: 0;
-  background-color: white; /* Set background to white */
-  color: black; /* Set text color to black */
+  background-color: white;
+  color: black;
   text-align: center;
 }
 
+p {
+  font-size: 1rem;
+  margin-bottom: 20px;
+}
+
+footer {
+  margin-top: 40px;
+  font-size: 0.9rem;
+  color: black;
+}
+
+/* ======================================= */
+/* Header and Navigation                   */
+/* ======================================= */
 header {
-  background-color: black; /* Set header background to black */
-  color: white; /* Set header text to white */
+  background-color: black;
+  color: white;
   padding: 20px 0;
 }
 
 header h1 {
   margin: 0;
   font-size: 2.5rem;
-  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 nav {
@@ -38,55 +53,44 @@ nav button {
   margin: 0 5px;
   padding: 10px 20px;
   font-size: 16px;
-  background-color: black; /* Button background black */
-  color: white; /* Button text white */
-  border: 2px solid white; /* Add white outline */
+  background-color: black;
+  color: white;
+  border: 2px solid white;
   border-radius: 5px;
   cursor: pointer;
-  font-family: 'Bebas Neue', sans-serif; /* Set font to Bebas Neue */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  font-family: 'Bebas Neue', sans-serif;
+  transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 nav button:hover {
-  background-color: white; /* On hover, button background changes to white */
-  color: black; /* On hover, button text changes to black */
-  border-color: black; /* Outline changes to black on hover */
+  background-color: white;
+  color: black;
+  border-color: black;
 }
 
-main h2 {
-  font-family: 'Bebas Neue', sans-serif; /* Set headings to Bebas Neue */
-  font-size: 2rem;
-  margin-bottom: 10px;
-}
-
-p {
-  font-family: Calibri, sans-serif; /* Set normal text to Calibri */
-  font-size: 1rem;
-  margin-bottom: 20px;
-}
-
-footer {
-  margin-top: 40px;
-  font-size: 0.9rem;
-  color: black; /* Footer text black */
-}
-
+/* ======================================= */
+/* Scenes and General Layout               */
+/* ======================================= */
 .scene {
-  display: none; /* Hide all scenes by default */
+  display: none;
   margin: 20px;
 }
 
 .scene.active {
-  display: block; /* Show only the active scene */
+  display: block;
 }
 
 .scene h2 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
   opacity: 0;
   transform: translateY(-10px);
-  transition: opacity 0.5s ease, transform 0.5s ease; /* Smooth fade and movement */
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-
+/* ======================================= */
+/* Season Buttons                          */
+/* ======================================= */
 #season-buttons-container {
   display: flex;
   flex-wrap: wrap;
@@ -106,10 +110,10 @@ footer {
   border-radius: 10px;
   font-family: 'Bebas Neue', sans-serif;
   font-size: 18px;
-  cursor: pointer;
   text-transform: uppercase;
   text-align: center;
   width: 150px;
+  cursor: pointer;
   transition: all 0.3s ease;
 }
 
@@ -125,6 +129,9 @@ footer {
   text-transform: none;
 }
 
+/* ======================================= */
+/* Match Cards                             */
+/* ======================================= */
 #match-cards-container {
   display: flex;
   flex-wrap: wrap;
@@ -134,13 +141,11 @@ footer {
 }
 
 .match-card {
-  display: flex;
   flex-direction: column;
-  justify-content: flex-start; /* Ensure elements stack naturally */
   align-items: center;
-  background-color: white; /* Default background color: white */
-  color: black; /* Default text color: black */
-  border: 2px solid black; /* Border matches hover color */
+  background-color: white;
+  color: black;
+  border: 2px solid black;
   border-radius: 10px;
   padding: 15px;
   width: 90%;
@@ -148,20 +153,15 @@ footer {
   text-align: center;
   margin: 20px auto;
   font-family: 'Bebas Neue', sans-serif;
-  transition: all 0.5s ease; /* Smooth transition for hover */
-  min-height: 300px; /* Ensures consistent height for all cards */
+  transition: all 0.5s ease;
+  min-height: 300px;
   cursor: pointer;
 }
 
-.match-card.expanded {
-  transform: scale(1.2); /* Larger size when expanded */
-  z-index: 10; /* Bring to front */
-}
-
 .match-card:hover {
-  background-color: black; /* Change background to black on hover */
-  color: white; /* Change text to white on hover */
-  border-color: white; /* Border matches text color on hover */
+  background-color: black;
+  color: white;
+  border-color: white;
 }
 
 .match-card h3 {
@@ -175,75 +175,193 @@ footer {
   font-family: Calibri, sans-serif;
 }
 
-
 .match-card .winner {
   font-size: 2rem;
   font-weight: bold;
   margin-top: 15px;
-  color: inherit; /* Matches the current text color */
+  color: inherit;
 }
 
 .match-card .description {
-  margin-top: auto; /* Push description to the bottom */
+  margin-top: auto;
   font-size: 1rem;
   font-family: Calibri, sans-serif;
   text-align: center;
-  min-height: 20px; /* Ensure space even if empty */
+  min-height: 20px;
 }
 
 .match-card .details {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 10px;
+  display: flex; /* Use flexbox for vertical alignment */
+  justify-content: space-between; /* Space out left and right sections */
+  align-items: center; /* Vertically align items */
+  margin-top: 20px;
 }
 
-.match-card .details div {
-  flex: 1;
+.match-card .details .left,
+.match-card .details .right {
+  flex: 1; /* Allow equal space for left and right sides */
+  text-align: center; /* Center-align text within each section */
+  font-size: 1.8rem; /* Maintain larger font size */
+  font-weight: bold; /* Make contender names stand out */
+}
+
+.match-card .details .middle {
+  flex: 0; /* Prevent the middle section from expanding */
+  text-align: center; /* Center-align VS */
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin: 0 15px; /* Add some horizontal spacing */
+}
+
+
+.match-card.expanded {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+/* ======================================= */
+/* Analysis Card                           */
+/* ======================================= */
+.analysis-card {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 800px;
+  font-family: 'Bebas Neue', sans-serif;
   text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
-.match-card .details div.middle {
-  font-size: 1.2rem;
+.analysis-card:not(.hidden) {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.match-card .round-details {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  margin-top: 15px;
-}
-
-.match-card .round-details div {
-  flex: 1;
-  text-align: center;
-  font-family: Calibri, sans-serif;
-}
-
-.match-card .contender {
-  text-align: center;
+.analysis-card h1 {
+  font-size: 2rem;
   margin-bottom: 10px;
 }
 
-.match-card .contender .name {
+.analysis-card h2 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.analysis-card h3 {
   font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+.analysis-card .final-result {
+  font-size: 1.2rem;
+  margin: 15px 0;
   font-weight: bold;
 }
 
-.match-card .contender .stats-header {
-  font-size: 0.9rem;
-  font-family: Calibri, sans-serif;
-  margin: 5px 0;
+.analysis-card .round-details {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 5px;
 }
 
-.match-card .contender .stats {
-  font-size: 0.9rem;
+.analysis-card .round-details .stats {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.analysis-card .description {
+  margin-top: 20px;
+  font-size: 1rem;
   font-family: Calibri, sans-serif;
-  color: inherit; /* Matches the card's text color */
+}
+
+/* ======================================= */
+/* Stats                                   */
+/* ======================================= */
+.stats {
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0;
+}
+
+.stats-left,
+.stats-right {
+  padding: 0 20px;
+  text-align: center;
+}
+
+.stats h4 {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.stats p {
+  margin: 0;
+}
+
+/* ======================================= */
+/* Contender Cards                         */
+/* ======================================= */
+#contender-cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.contender-card {
+  background-color: black;
+  color: white;
+  border: 2px solid white;
+  border-radius: 10px;
+  width: 400px; /* Wider card for better table fit */
+  padding: 20px;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
 }
 
 
+.contender-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
 
+.contender-card p {
+  font-size: 1rem;
+  margin-bottom: 10px;
+}
+
+.contender-card table {
+  width: 100%;
+  margin-top: 10px;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.contender-card th,
+.contender-card td {
+  border: 1px solid white;
+  padding: 5px;
+}
+
+.contender-card th {
+  background-color: black;
+  color: white;
+}
+
+.contender-card td {
+  background-color: white;
+  color: black;
+}
 
 </style>
 </head>
@@ -266,7 +384,6 @@ footer {
 
     <section id="contenders" class="scene">
       <h2>Contenders</h2>
-      <p>Meet the champions and challengers of THE BOARD.</p>
     </section>
   </main>
 
@@ -342,7 +459,7 @@ async function replaceContenderPlaceholders(description, contenders) {
     }
   }
 
-  // Replace placeholders in the description
+  // Replace all placeholders in the description
   return description.replace(/{(.*?)}/g, (match, id) => replacements[id] || match);
 }
 
@@ -393,121 +510,227 @@ function showScene(sceneID) {
 
 
 
-  function expandCard(card) {
-    // Add transition effects for expansion
-    const cards = document.querySelectorAll('.match-card');
-    const nav = document.querySelector('header'); // Reference to the nav bar
-    cards.forEach(c => {
-      if (c !== card) {
-        c.style.opacity = '0'; // Fade out other cards
-      }
+function expandCard(card) {
+  const cards = document.querySelectorAll('.match-card');
+  const nav = document.querySelector('header'); // Reference to the nav bar
+
+  // Fade out all cards except the selected one
+  cards.forEach(c => {
+    if (c !== card) {
+      c.style.transition = 'opacity 0.5s ease';
+      c.style.opacity = '0'; // Fade out other cards
+    }
+  });
+
+  // Expand the selected card
+  card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
+  card.style.transform = 'scale(1.2)'; // Expand the clicked card
+  card.style.zIndex = '10';
+  card.style.opacity = '0'; // Fade out the clicked card
+
+  // Fade out the nav bar
+  nav.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+  nav.style.opacity = '0';
+  nav.style.transform = 'translateY(-100%)'; // Slide up
+
+  // Delay to show the analysis mode
+  setTimeout(() => {
+    showScene('analysis');
+
+    // Slide the nav bar back down and fade it in
+    nav.style.opacity = '1';
+    nav.style.transform = 'translateY(0)'; // Reset position
+  }, 500);
+}
+
+function formatStats(stats) {
+  return {
+    kills: stats?.kills ?? '-',
+    deaths: stats?.deaths ?? '-',
+    score: stats?.score ?? '-',
+  };
+}
+
+  
+async function loadAnalysis(seasonID, matchID) {
+  const container = document.getElementById('analysis-container');
+  container.innerHTML = ''; // Clear previous content
+
+  try {
+    const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+    const yinName = await getContenderDetails(match.Contenders.yin[0]);
+    const yangName = await getContenderDetails(match.Contenders.yang[0]);
+
+    // Determine the final result
+    let finalResultText;
+    if (!match.Result) {
+      finalResultText = "Game not yet played";
+    } else {
+      const finalResult = match.Result === "yin" ? yinName : yangName;
+      finalResultText = `${finalResult} WON`;
+    }
+
+    // Create the analysis card
+    const analysisCard = document.createElement('div');
+    analysisCard.className = 'analysis-card hidden'; // Start hidden for fade-in
+    analysisCard.innerHTML = `
+      <h1>${yinName} VS ${yangName}</h1>
+      <h2>${match.Details.Style}</h2>
+      <h3>${match.Date}</h3>
+      <div class="final-result">
+        <strong>Series Result:</strong> ${finalResultText}
+      </div>
+      <h2>ROUNDS</h2>
+    `;
+
+    // Add round details
+    match.Rounds.forEach((round, index) => {
+      const yinStats = formatStats(round.Scores[match.Contenders.yin[0]]);
+      const yangStats = formatStats(round.Scores[match.Contenders.yang[0]]);
+    
+      const roundResult = round.Results.yin === null && round.Results.yang === null
+        ? "No result yet"
+        : round.Results.yin
+        ? yinName
+        : yangName;
+    
+      const roundDetails = document.createElement('div');
+      roundDetails.className = 'round-details';
+      roundDetails.innerHTML = `
+        <h3>Round ${index + 1}: ${round.Type} on ${round.Map}</h3>
+        <div class="stats">
+          <div class="stats-left">
+            <h4>${yinName}</h4>
+            <p>K D S</p>
+            <p>${yinStats.kills} ${yinStats.deaths} ${yinStats.score}</p>
+          </div>
+          <div class="stats-right">
+            <h4>${yangName}</h4>
+            <p>K D S</p>
+            <p>${yangStats.kills} ${yangStats.deaths} ${yangStats.score}</p>
+          </div>
+        </div>
+        <div class="round-result">
+          <strong>Round Winner:</strong> ${roundResult}
+        </div>
+      `;
+      analysisCard.appendChild(roundDetails);
     });
-  
-    card.style.transition = 'transform 0.3s ease, opacity 0.3s ease';
-    card.style.transform = 'scale(1.2)'; // Expand the clicked card
-    card.style.zIndex = '10';
-    card.style.opacity = '0'; // Ensure the clicked card remains visible
 
-      // Fade out the nav bar
-    nav.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-    nav.style.opacity = '0';
-    nav.style.transform = 'translateY(-20px)'; // Slide up the nav bar
-  
-    // Wait for the transition to finish before switching to the Analysis scene
+    // Add description
+    const descriptionText = match.Details.Description
+      ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
+      : "No description provided.";
+    const descriptionDiv = document.createElement('div');
+    descriptionDiv.className = 'description';
+    descriptionDiv.innerHTML = `<p>${descriptionText}</p>`;
+    analysisCard.appendChild(descriptionDiv);
+
+    // Append the card to the container in a hidden state
+    container.appendChild(analysisCard);
+
+    // Force reflow and trigger fade-in
     setTimeout(() => {
-      showScene('analysis');
-      card.style.transform = ''; // Reset card styles
-      cards.forEach(c => (c.style.opacity = '')); // Reset opacity of all cards
-    }, 500); // Match the duration of the transition
+      analysisCard.offsetHeight; // Trigger reflow
+      analysisCard.classList.remove('hidden'); // Apply the visible styles
+    }, 500); // Delay matches the fade-out of other cards
+  } catch (error) {
+    console.error(`Error loading match analysis:`, error);
+    container.innerHTML = '<p>Error loading analysis data.</p>';
   }
-  
+}
 
-  async function loadMatches(seasonID) {
-    const container = document.getElementById('match-cards-container');
-    container.innerHTML = ''; // Clear previous matches
-  
-    try {
-      const seasons = await fetchJSON("seasons/manifest.json");
-      const season = seasons.find(s => s.ID === seasonID);
-  
-      if (!season) {
-        container.innerHTML = `<p>Season not found.</p>`;
-        console.error(`Season with ID "${seasonID}" not found`);
-        return;
-      }
-  
-      if (season.Matches && season.Matches.length > 0) {
-        const matches = [...season.Matches].reverse(); // Reverse the order of matches
-        for (const matchID of matches) {
-          const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
-          const yinName = await getContenderDetails(match.Contenders.yin[0]);
-          const yangName = await getContenderDetails(match.Contenders.yang[0]);
-  
-          // Determine winner if Result is not null
-          let winnerText = "";
-          if (match.Result) {
-            const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
-            const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
-            winnerText = `${winnerNames.join(", ")} WON`;
-          }
-  
-          const card = document.createElement('div');
-          card.className = 'match-card';
-          card.innerHTML = `
-            <h3>${match.Details.Style}</h3>
-            <div class="subheading">${match.Date}</div>
-            ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
-            <div class="details">
-              <div class="contender">
-                <div class="name">${yinName}</div>
-                <div class="stats-header">K D S</div>
-                <div class="stats"></div> <!-- Stats are initially empty -->
-              </div>
-              <div class="middle">VS</div>
-              <div class="contender">
-                <div class="name">${yangName}</div>
-                <div class="stats-header">K D S</div>
-                <div class="stats"></div> <!-- Stats are initially empty -->
-              </div>
+    
+    
+
+async function loadMatches(seasonID) {
+  const container = document.getElementById('match-cards-container');
+  container.innerHTML = ''; // Clear previous matches
+
+  try {
+    const seasons = await fetchJSON("seasons/manifest.json");
+    const season = seasons.find(s => s.ID === seasonID);
+
+    if (!season) {
+      container.innerHTML = `<p>Season not found.</p>`;
+      console.error(`Season with ID "${seasonID}" not found`);
+      return;
+    }
+
+    if (season.Matches && season.Matches.length > 0) {
+      const matches = [...season.Matches].reverse(); // Reverse the order of matches
+      for (const matchID of matches) {
+        const match = await fetchJSON(`seasons/${seasonID}/${matchID}.json`);
+        const yinName = await getContenderDetails(match.Contenders.yin[0]);
+        const yangName = await getContenderDetails(match.Contenders.yang[0]);
+
+        let winnerText = "";
+        if (match.Result) {
+          const winnerSide = match.Result === "yin" ? match.Contenders.yin : match.Contenders.yang;
+          const winnerNames = await Promise.all(winnerSide.map(getContenderDetails));
+          winnerText = `${winnerNames.join(", ")} WON`;
+        }
+
+        const card = document.createElement('div');
+        card.className = 'match-card';
+
+        // Generate scores for all rounds
+        const yinRoundScores = match.Rounds.map(round => {
+          const stats = formatStats(round.Scores[match.Contenders.yin[0]]);
+          return `${stats.kills} ${stats.deaths} ${stats.score}`;
+        }).join("<br>");
+
+        const yangRoundScores = match.Rounds.map(round => {
+          const stats = formatStats(round.Scores[match.Contenders.yang[0]]);
+          return `${stats.kills} ${stats.deaths} ${stats.score}`;
+        }).join("<br>");
+
+        card.innerHTML = `
+          <h3>${match.Details.Style}</h3>
+          <div class="subheading">${match.Date}</div>
+          ${winnerText ? `<div class="winner">${winnerText}</div>` : ""}
+          <div class="details">
+            <div class="left">
+              <h4>${yinName}</h4>
+              <p>K D S</p>
+              <p>${yinRoundScores}</p>
             </div>
-          `;
-  
-          match.Rounds.forEach(round => {
-            const yinStats = round.Scores[match.Contenders.yin[0]];
-            const yangStats = round.Scores[match.Contenders.yang[0]];
-            const roundDetails = document.createElement('div');
-            roundDetails.className = 'round-details';
-            roundDetails.innerHTML = `
-              <div>${yinStats.kills || '-'} ${yinStats.deaths || '-'} ${yinStats.score || '-'}</div>
-              <div class="middle">${round.Map}</div>
-              <div>${yangStats.kills || '-'} ${yangStats.deaths || '-'} ${yangStats.score || '-'}</div>
-            `;
-            card.appendChild(roundDetails);
-            card.onclick = () => expandCard(card); // Attach the click event
-          });
-  
-          // Add description as the last element
+            <div class="middle">VS</div>
+            <div class="right">
+              <h4>${yangName}</h4>
+              <p>K D S</p>
+              <p>${yangRoundScores}</p>
+            </div>
+          </div>
+        `;
+
+        // Add description with placeholder replacements
+        if (match.Details.Description) {
           const description = document.createElement('div');
           description.className = 'description';
-          description.innerHTML = match.Details.Description
-            ? await replaceContenderPlaceholders(match.Details.Description, match.Contenders)
-            : "&nbsp;";
+          description.innerHTML = await replaceContenderPlaceholders(match.Details.Description, match.Contenders);
           card.appendChild(description);
-  
-          container.appendChild(card);
         }
-      } else {
-        container.innerHTML = '<p>No matches found for this season.</p>';
+
+        // Set up click event for analysis
+        card.onclick = () => {
+          expandCard(card);
+          loadAnalysis(seasonID, matchID); // Load detailed analysis
+        };
+
+        container.appendChild(card);
       }
-  
-      showScene('matches');
-    } catch (error) {
-      console.error('Error loading matches:', error);
-      container.innerHTML = '<p>Error loading matches.</p>';
+    } else {
+      container.innerHTML = '<p>No matches found for this season.</p>';
     }
+
+    showScene('matches');
+  } catch (error) {
+    console.error('Error loading matches:', error);
+    container.innerHTML = '<p>Error loading matches.</p>';
   }
-  
-  
+}
+
 
 // Add click event for season buttons
 function loadSeasons() {
@@ -532,11 +755,145 @@ function loadSeasons() {
     .catch(error => console.error("Error loading seasons manifest:", error));
 }
 
+async function loadContenders() {
+  const contendersSection = document.getElementById('contenders');
+  const container = document.createElement('div');
+  container.id = 'contender-cards-container';
+  contendersSection.appendChild(container);
+
+  const uniqueContenders = new Set();
+  const seasonStats = {}; // Store stats per contender per season
+
+  try {
+    const seasons = await fetchJSON("seasons/manifest.json");
+
+    // Find all unique contenders and gather stats
+    for (const season of seasons) {
+      seasonStats[season.ID] = {}; // Initialize stats for the season
+
+      if (season.Matches) {
+        for (const matchID of season.Matches) {
+          const match = await fetchJSON(`seasons/${season.ID}/${matchID}.json`);
+
+          // Process contenders and their stats
+          for (const side of ["yin", "yang"]) {
+            for (const contenderID of match.Contenders[side]) {
+              if (!seasonStats[season.ID][contenderID]) {
+                seasonStats[season.ID][contenderID] = {
+                  series: 0,
+                  games: 0,
+                  wins: 0,
+                  losses: 0,
+                  kills: 0,
+                  deaths: 0,
+                };
+              }
+
+              // Increment series played
+              seasonStats[season.ID][contenderID].series++;
+
+              // Accumulate round stats
+              for (const round of match.Rounds) {
+                const scores = round.Scores[contenderID] || { kills: 0, deaths: 0 };
+                seasonStats[season.ID][contenderID].games++;
+                seasonStats[season.ID][contenderID].kills += scores.kills;
+                seasonStats[season.ID][contenderID].deaths += scores.deaths;
+
+                // Only count wins/losses for rounds with results
+                if (round.Results && (round.Results.yin !== null || round.Results.yang !== null)) {
+                  if (round.Results[side]) {
+                    seasonStats[season.ID][contenderID].wins++;
+                  } else {
+                    seasonStats[season.ID][contenderID].losses++;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Generate contender cards
+    for (const seasonID of Object.keys(seasonStats)) {
+      for (const contenderID of Object.keys(seasonStats[seasonID])) {
+        uniqueContenders.add(contenderID);
+      }
+    }
+
+    for (const contenderID of uniqueContenders) {
+      const contender = await fetchJSON(`contenders/${contenderID}.json`);
+
+      const card = document.createElement('div');
+      card.className = 'contender-card';
+
+      // Generate stats table
+      let statsTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Season</th>
+              <th>Series</th>
+              <th>Games</th>
+              <th>Wins</th>
+              <th>Losses</th>
+              <th>W/L</th>
+              <th>Kills</th>
+              <th>Deaths</th>
+              <th>KDR</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (const seasonID of Object.keys(seasonStats)) {
+        if (seasonStats[seasonID][contenderID]) {
+          const stats = seasonStats[seasonID][contenderID];
+          const wlRatio = (stats.wins / (stats.losses || 1)).toFixed(2);
+          const kdr = (stats.kills / (stats.deaths || 1)).toFixed(2);
+          const seasonName = seasons.find(s => s.ID === seasonID).Name;
+
+          statsTable += `
+            <tr>
+              <td>${seasonName}</td>
+              <td>${stats.series}</td>
+              <td>${stats.games}</td>
+              <td>${stats.wins}</td>
+              <td>${stats.losses}</td>
+              <td>${wlRatio}</td>
+              <td>${stats.kills}</td>
+              <td>${stats.deaths}</td>
+              <td>${kdr}</td>
+            </tr>
+          `;
+        }
+      }
+
+      statsTable += `
+          </tbody>
+        </table>
+      `;
+
+      card.innerHTML = `
+        <h3>${contender.Name} "${contender.Nickname}"</h3>
+        <p>${contender.Description}</p>
+        ${statsTable}
+      `;
+
+      container.appendChild(card);
+    }
+  } catch (error) {
+    console.error("Error loading contenders:", error);
+    container.innerHTML = '<p>Error loading contenders.</p>';
+  }
+}
+
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   showScene("seasons"); // Default to seasons
   loadSeasons(); // Load season buttons
+  loadContenders(); // Load contender cards
 });
 
 </script>

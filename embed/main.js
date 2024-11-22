@@ -353,9 +353,143 @@ function loadSeasons() {
     .catch(error => console.error("Error loading seasons manifest:", error));
 }
 
+async function loadContenders() {
+  const contendersSection = document.getElementById('contenders');
+  const container = document.createElement('div');
+  container.id = 'contender-cards-container';
+  contendersSection.appendChild(container);
+
+  const uniqueContenders = new Set();
+  const seasonStats = {}; // Store stats per contender per season
+
+  try {
+    const seasons = await fetchJSON("seasons/manifest.json");
+
+    // Find all unique contenders and gather stats
+    for (const season of seasons) {
+      seasonStats[season.ID] = {}; // Initialize stats for the season
+
+      if (season.Matches) {
+        for (const matchID of season.Matches) {
+          const match = await fetchJSON(`seasons/${season.ID}/${matchID}.json`);
+
+          // Process contenders and their stats
+          for (const side of ["yin", "yang"]) {
+            for (const contenderID of match.Contenders[side]) {
+              if (!seasonStats[season.ID][contenderID]) {
+                seasonStats[season.ID][contenderID] = {
+                  series: 0,
+                  games: 0,
+                  wins: 0,
+                  losses: 0,
+                  kills: 0,
+                  deaths: 0,
+                };
+              }
+
+              // Increment series played
+              seasonStats[season.ID][contenderID].series++;
+
+              // Accumulate round stats
+              for (const round of match.Rounds) {
+                const scores = round.Scores[contenderID] || { kills: 0, deaths: 0 };
+                seasonStats[season.ID][contenderID].games++;
+                seasonStats[season.ID][contenderID].kills += scores.kills;
+                seasonStats[season.ID][contenderID].deaths += scores.deaths;
+
+                // Only count wins/losses for rounds with results
+                if (round.Results && (round.Results.yin !== null || round.Results.yang !== null)) {
+                  if (round.Results[side]) {
+                    seasonStats[season.ID][contenderID].wins++;
+                  } else {
+                    seasonStats[season.ID][contenderID].losses++;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+    // Generate contender cards
+    for (const seasonID of Object.keys(seasonStats)) {
+      for (const contenderID of Object.keys(seasonStats[seasonID])) {
+        uniqueContenders.add(contenderID);
+      }
+    }
+
+    for (const contenderID of uniqueContenders) {
+      const contender = await fetchJSON(`contenders/${contenderID}.json`);
+
+      const card = document.createElement('div');
+      card.className = 'contender-card';
+
+      // Generate stats table
+      let statsTable = `
+        <table>
+          <thead>
+            <tr>
+              <th>Season</th>
+              <th>Series</th>
+              <th>Games</th>
+              <th>Wins</th>
+              <th>Losses</th>
+              <th>W/L</th>
+              <th>Kills</th>
+              <th>Deaths</th>
+              <th>KDR</th>
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+      for (const seasonID of Object.keys(seasonStats)) {
+        if (seasonStats[seasonID][contenderID]) {
+          const stats = seasonStats[seasonID][contenderID];
+          const wlRatio = (stats.wins / (stats.losses || 1)).toFixed(2);
+          const kdr = (stats.kills / (stats.deaths || 1)).toFixed(2);
+          const seasonName = seasons.find(s => s.ID === seasonID).Name;
+
+          statsTable += `
+            <tr>
+              <td>${seasonName}</td>
+              <td>${stats.series}</td>
+              <td>${stats.games}</td>
+              <td>${stats.wins}</td>
+              <td>${stats.losses}</td>
+              <td>${wlRatio}</td>
+              <td>${stats.kills}</td>
+              <td>${stats.deaths}</td>
+              <td>${kdr}</td>
+            </tr>
+          `;
+        }
+      }
+
+      statsTable += `
+          </tbody>
+        </table>
+      `;
+
+      card.innerHTML = `
+        <h3>${contender.Name} "${contender.Nickname}"</h3>
+        <p>${contender.Description}</p>
+        ${statsTable}
+      `;
+
+      container.appendChild(card);
+    }
+  } catch (error) {
+    console.error("Error loading contenders:", error);
+    container.innerHTML = '<p>Error loading contenders.</p>';
+  }
+}
+
 
 // Initialize
 document.addEventListener("DOMContentLoaded", () => {
   showScene("seasons"); // Default to seasons
   loadSeasons(); // Load season buttons
+  loadContenders(); // Load contender cards
 });
