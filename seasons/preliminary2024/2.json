@@ -15,38 +15,38 @@
             "Type": "1v1 FFA",
             "Map": "Nuketown" ,
             "Scores": {
-                "bazinga": {"kills": null, "deaths": null, "score": null},
-                "terrorist": {"kills": null, "deaths": null, "score": null}
+                "bazinga": {"kills": 14, "deaths": 17, "score": 14},
+                "terrorist": {"kills": 17, "deaths": 14, "score": 17}
             },
             "Results": {
-                "yin": null, 
-                "yang": null
+                "yin": false, 
+                "yang": true
             }
         },
         {
             "Type": "1v1 FFA",
-            "Map": "TBD" ,
+            "Map": "Skyline" ,
             "Scores": {
-                "bazinga": {"kills": null, "deaths": null, "score": null},
-                "terrorist": {"kills": null, "deaths": null, "score": null}
+                "bazinga": {"kills": 18, "deaths": 15, "score": 18},
+                "terrorist": {"kills": 15, "deaths": 18, "score": 15}
             },
             "Results": {
-                "yin": null, 
-                "yang": null
+                "yin": true, 
+                "yang": false
             }
         },
         {
             "Type": "1v1 FFA",
-            "Map": "TBD" ,
+            "Map": "Stakeout" ,
             "Scores": {
-                "bazinga": {"kills": null, "deaths": null, "score": null},
-                "terrorist": {"kills": null, "deaths": null, "score": null}
+                "bazinga": {"kills": 16, "deaths": 11, "score": 16},
+                "terrorist": {"kills": 11, "deaths": 17, "score": 11}
             },
             "Results": {
-                "yin": null, 
-                "yang": null
+                "yin": true, 
+                "yang": false
             }
         }
     ],
-    "Result": null
+    "Result": "yin"
 }
